@@ -11,8 +11,9 @@ pipeline {
             
         }
         stage('SonarQube analysis') {
+            def scannerHome = tool 'SonarScanner 4.0';
             steps{
-                withSonarQubeEnv('sonarqube-lts-community'){
+                withSonarQubeEnv('eno-sonar'){
                     sh "mvn sonar:sonar"
                 }
             }
