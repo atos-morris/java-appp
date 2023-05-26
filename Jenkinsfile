@@ -1,22 +1,29 @@
-pipeline {
+pipeline{
     agent any
     environment {
-        PATH = "/opt/maven/bin:$PATH"
+        PATH = "$PATH:/opt/apache-maven-3.8.2/bin"
     }
     stages{
-        stage("build code"){
+       stage('GetCode'){
             steps{
-                sh 'mvn clean install'
+                git 'https://github.com/enomorr/java-app.git'
             }
-            
-        }
-       stage('SonarQube analysis') {
-            def scannerHome = tool 'SonarScanner 4.0';
+         }        
+       stage('Build'){
             steps{
-                withSonarQubeEnv('eno-sonar'){
-                    sh "mvn sonar:sonar"
-                }
+                sh 'mvn clean package'
             }
+         }
+        stage('SonarQube analysis') {
+//    def scannerHome = tool 'SonarScanner 4.0';
+        steps{
+        withSonarQubeEnv('eno-sonar') { 
+        // If you have configured more than one global server connection, you can specify its name
+//      sh "${scannerHome}/bin/sonar-scanner"
+        sh "mvn sonar:sonar"
+    }
         }
+        }
+       
     }
 }
