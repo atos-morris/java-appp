@@ -1,29 +1,18 @@
-pipeline{
-    agent any
+pipeline {
+    agent{
+     node{
+        label "java_slave"
+     }
+    }
     environment {
-        PATH = "$PATH:/usr/share/maven/bin"
+        PATH = "/opt/maven/bin:$PATH"
     }
     stages{
-       stage('GetCode'){
+        stage("build code"){
             steps{
-                git 'https://github.com/ravdy/hello-world.git'
+                sh 'mvn clean install'
             }
-         }        
-       stage('Build'){
-            steps{
-                sh 'mvn clean package'
-            }
-         }
-        stage('SonarQube analysis') {
-//    def scannerHome = tool 'SonarScanner 4.0';
-        steps{
-        withSonarQubeEnv('eno-sonar') { 
-        // If you have configured more than one global server connection, you can specify its name
-//      sh "${scannerHome}/bin/sonar-scanner"
-        sh "mvn sonar:sonar"
-    }
+            
         }
-        }
-       
     }
 }
