@@ -6,7 +6,7 @@ pipeline{
     stages{
        stage('GetCode'){
             steps{
-                git 'https://github.com/enomorr/java-app.git'
+                git 'https://github.com/ravdy/hello-world.git'
             }
          }        
        stage('Build'){
